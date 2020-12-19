@@ -79,7 +79,7 @@ Then, finally, the speed of the dithering itself. If an optimization makes it ha
 
 Feel free to contribute to this project. Remember the Project Priorities, and please follow the code of conduct.
 
-### Pull Request Process
+### Pull Request Process
 
 - Ensure any install or build dependencies are removed before the end of the layer when doing a build.
 - Ensure your work is thoroughly tested, to the best of your abilities
