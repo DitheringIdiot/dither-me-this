@@ -4,6 +4,26 @@ Generate dithered images at build time for your static website.
 
 **this project is not ready for production**
 
+## How to use it.
+
+For now this project is not working with any static site generator.
+But you can still test out the code:
+
+1. Download the project
+
+2. Install the dependencies:
+
+```
+npm install canvas fs-extra
+```
+
+3. Put images in the `input` folder
+
+4. `npm run start` in your terminal
+
+5. Dithered images are placed in the `output` folder
+
+
 ## What and Why?
 
 Dithering is a method of reducing the colors in an image and emulating the missing colors with strategically placed dots.
