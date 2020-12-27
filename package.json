@@ -5,9 +5,6 @@
   "main": "src/index.js",
   "author": "ShadowfaxRodeo",
   "license": "ISC",
-  "dependencies": {
-    "canvas": "^2.6.1",
-    "fs-extra": "^9.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {}
 }
