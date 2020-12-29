@@ -8,8 +8,9 @@ const colorHelpers = require('./functions/color-helpers')
 const colorPaletteFromImage = require('./functions/color-palette-from-image')
 const utilities = require('./functions/utilities')
 const findClosestPaletteColor = require('./functions/find-closest-palette-color')
+const { createCanvas, Image, loadImage } = require('canvas')
 
-const options = {
+const defaultOptions = {
     dither: 'errorDiffusion', // ordered, random, errorDiffusion, non
     random: 'blackAndWhite', // blackAndWhite, Color 
     ordered: {
@@ -25,11 +26,22 @@ const options = {
     numberOfColors: 10
 }
 
-const dither = (image /* ImageData */) => {
+const dither = async (imageBuffer, opts) => {
 
-    if (!image) {
+
+    if (!imageBuffer) {
         return
     }
+
+    console.log(imageBuffer)
+
+    const image = await imageDataFromBuffer(imageBuffer)
+
+    console.log(image)
+
+    const options = { ...defaultOptions, ...opts }
+
+
 
     const width = image.width
     let colorPalette = []
@@ -103,7 +115,10 @@ const dither = (image /* ImageData */) => {
         }
     }
 
-    return image
+
+
+
+    return imageDataToBuffer(image)
 
 }
 
@@ -148,6 +163,25 @@ const pixelXY = (index, width) => {
 const setColorPalette = (palette) => {
     let paletteArray = typeof palette === 'string' ? palettes[palette] : palette
     return paletteArray.map(color => colorHelpers.hexToRgb(color))
+}
+
+const imageDataFromBuffer = async (buffer) => {
+
+    const image = await loadImage(buffer)
+    const canvas = createCanvas(image.width, image.height)
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(image, 0, 0, image.width, image.height)
+    const imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    return imagedata
+
+}
+
+const imageDataToBuffer = (imageData) => {
+    const canvas = createCanvas(imageData.width, imageData.height)
+    const ctx = canvas.getContext('2d')
+    ctx.putImageData(imageData, 0, 0)
+    const buffer = canvas.toBuffer()
+    return buffer
 }
 
 module.exports = dither
