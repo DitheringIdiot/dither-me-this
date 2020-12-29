@@ -1,6 +1,6 @@
 {
   "name": "dither-me-this",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Dither images at build time for static site generators.",
   "main": "src/index.js",
   "author": "ShadowfaxRodeo",
