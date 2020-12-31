@@ -91,8 +91,6 @@ const centroidsMatch = (oldCentroids, newCentroids) => {
     let oldC = oldCentroids.map(centroid => centroid.position).flat()
     let newC = newCentroids.map(centroid => centroid.position).flat()
 
-    console.log(oldC)
-    console.log(newC)
 
     let matching = true
 

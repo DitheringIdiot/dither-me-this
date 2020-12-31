@@ -52,9 +52,6 @@ const createBayerMatrix = (size /* [X, Y] */) => {
     })
 
 
-
-
-
     // function getPsuedoToroidalDistance (node1, node2 /* [x, y] */) {
     //     const xDistance = Math.abs(node1[0] - node2[0])
     //     const yDistance = Math.abs(node1[1] - node2[1])
@@ -97,7 +94,6 @@ const createBayerMatrix = (size /* [X, Y] */) => {
     //     }
     // }
 
-    // console.log(matrix)
     return matrix
 
 }

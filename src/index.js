@@ -33,11 +33,7 @@ const dither = async (imageBuffer, opts) => {
         return
     }
 
-    console.log(imageBuffer)
-
     const image = await imageDataFromBuffer(imageBuffer)
-
-    console.log(image)
 
     const options = { ...defaultOptions, ...opts }
 
