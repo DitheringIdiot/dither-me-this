@@ -6,7 +6,8 @@
   "author": "ShadowfaxRodeo",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.8.0"
+    "canvas": "^2.8.0",
+    "fs-extra": "^10.0.0"
   },
   "devDependencies": {}
 }
