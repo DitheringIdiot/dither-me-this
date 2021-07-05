@@ -11,20 +11,24 @@ const findClosestPaletteColor = require('./functions/find-closest-palette-color'
 const { createCanvas, Image, loadImage } = require('canvas')
 
 const defaultOptions = {
-    dither: 'errorDiffusion', // ordered, random, errorDiffusion, non
-    random: 'blackAndWhite', // blackAndWhite, Color 
-    ordered: {
-        type: 'bayer',
-        matrix: [4, 4]
-    },
-    errorDiffusion: {
-        type: 'Sierra2-4A'
-    },
-    palette: 'default', // color[], 'palette name'
-    threshold: 50,
+    ditheringType: "errorDiffusion",
+
+    errorDiffusionMatrix: "floydSteinberg",
     serpentine: false,
-    numberOfColors: 10
+
+    orderedDitheringType: 'bayer',
+    orderedDitheringMatrix: [4, 4],
+
+    randomDitheringType: "blackAndWhite",
+
+    palette: 'default',
+    threshold: 50,
+
+    sampleColorsFromImage: false,
+    numberOfSampleColors: 10
 }
+
+
 
 const dither = async (imageBuffer, opts) => {
 
@@ -42,8 +46,8 @@ const dither = async (imageBuffer, opts) => {
     const width = image.width
     let colorPalette = []
 
-    if (!options.palette || options.palette === 'default') {
-        colorPalette = colorPaletteFromImage(image, options.numberOfColors)
+    if (!options.palette || options.sampleColorsFromImage === true) {
+        colorPalette = colorPaletteFromImage(image, options.numberOfSampleColors)
     } else {
         colorPalette = setColorPalette(options.palette)
     }
@@ -57,7 +61,7 @@ const dither = async (imageBuffer, opts) => {
         image.data[pixelIndex + 3] = pixel[3]
     }
 
-    const thresholdMap = bayerMatrix([options.ordered.matrix[0], options.ordered.matrix[1]])
+    const thresholdMap = bayerMatrix([options.orderedDitheringMatrix[0], options.orderedDitheringMatrix[1]])
 
 
     let current, newPixel, quantError, oldPixel
@@ -67,32 +71,32 @@ const dither = async (imageBuffer, opts) => {
         let currentPixel = current
         oldPixel = getPixelColorValues(currentPixel, image.data)
 
-        if (!options.dither || options.dither === 'none') {
+        if (!options.ditheringType || options.ditheringType === 'quantizationOnly') {
             newPixel = findClosestPaletteColor(oldPixel, colorPalette)
             setPixel(currentPixel, newPixel)
         }
 
 
-        if (options.dither === 'randomDither') {
+        if (options.ditheringType === 'random' && options.randomDitheringType === 'rgb') {
             newPixel = randomDitherPixelValue(oldPixel)
             setPixel(currentPixel, newPixel)
         }
 
-        if (options.dither === 'randomDitherBlackAndWhite') {
+        if (options.ditheringType === 'random' && options.randomDitheringType === 'blackAndWhite') {
             newPixel = randomDitherBlackAndWhitePixelValue(oldPixel)
             setPixel(currentPixel, newPixel)
         }
 
 
-        if (options.dither === 'ordered') {
+        if (options.ditheringType === 'ordered') {
             const orderedDitherThreshold = 256 / 4
             newPixel = orderedDitherPixelValue(oldPixel, pixelXY(currentPixel / 4, width), thresholdMap, orderedDitherThreshold)
             newPixel = findClosestPaletteColor(newPixel, colorPalette)
             setPixel(currentPixel, newPixel)
         }
 
-        const diffusionMap = diffusionMaps[options.errorDiffusion.type]() || diffusionMaps['floydSteinberg']()
-        if (options.dither === 'errorDiffusion') {
+        const diffusionMap = diffusionMaps[options.errorDiffusionMatrix]() || diffusionMaps['floydSteinberg']()
+        if (options.ditheringType === 'errorDiffusion') {
             newPixel = findClosestPaletteColor(oldPixel, colorPalette)
 
             setPixel(currentPixel, newPixel)

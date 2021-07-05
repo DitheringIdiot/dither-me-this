@@ -23,6 +23,44 @@ npm install canvas fs-extra
 
 5. Dithered images are placed in the `output` folder
 
+## Options 
+
+```js
+
+const options = {
+    ditheringType: "errorDiffusion" // errorDiffusion, ordered, random, noDither
+
+    // Error Diffusion Dithering options
+    errorDiffusionMatrix: "floydSteinberg", // Keyword or matrix (not yet implemented)
+    serpentine: false // NOT YET IMPLEMENTED
+
+    // Ordered Dithering Options
+    orderedType:'bayer', // No other option yet implemented
+    orderedMatrix:[4, 4] // Minimum 1, maximum 8 ... for now
+
+    // Random Dithering Options
+    // Random Dithering shouldn't be used except for educational purposes
+    randomDitheringType: "blackAndWhite",
+
+    // Color Options
+    palette: 'default', // palette name | Color[]
+    threshold:50, // to lighten and darken images (this should probably be automatic)
+
+    // Automatic Color Options
+    sampleColorsFromImage:false,
+    numberOfSampleColors:10
+
+}
+
+
+
+
+
+
+
+
+```
+
 
 ## What and Why?
 
