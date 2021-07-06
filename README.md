@@ -1,29 +1,61 @@
 # Dither Me This
 
+
 Generate dithered images at build time for your static website.
 
-**this project is not ready for production**
+Dither me this is just does the dithering.
 
-## How to use it.
+Specific site generators will require different packages that use dither-me-this.
 
-For now this project is not working with any static site generator.
-But you can still test out the code:
+for sites built with 11ty see @11ty-dither
 
-1. Download the project
+Dither me this takes an image and a set of options, and outputs a dithered image
 
-2. Install the dependencies:
+
+## Installation
+
+Install dither-me-this with npm and add it to your dev dependencies like so:
 
 ```
-npm install canvas fs-extra
+npm install dither-me-this --save-dev
 ```
 
-3. Put images in the `input` folder
+## Usage
 
-4. `npm run start` in your terminal
+The code below shows an image being read from a file, dithered based on a set of options, then output as a new file.
 
-5. Dithered images are placed in the `output` folder
+```js
+const dither = require("dither-me-this")
+const fs = require('fs')
 
-## Options 
+const options = {...}
+
+fs.readFile("input.jpg", async (err, data) => {
+
+    if (err) throw err
+
+    const ditheredImage = await dither(data, options)
+
+    fs.writeFile('output.png', ditheredImage, (err) => {
+
+        if (err) throw err
+
+    })
+
+})
+```
+
+dither-me-this is a single function that takes two arguments:
+
+1. The image you want to dither as a [`Buffer()`](https://nodejs.org/api/buffer.html#buffer_class_buffer)
+2. An [`Object`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#objects) containing dithering options
+
+
+## Options
+
+`dither-me-this` has lots options. Any options left blank will fallback to the default.
+
+Some options only apply to specific types of dithering.
 
 ```js
 
@@ -43,8 +75,7 @@ const options = {
     randomDitheringType: "blackAndWhite",
 
     // Color Options
-    palette: 'default', // palette name | Color[]
-    threshold:50, // to lighten and darken images (this should probably be automatic)
+    palette: ["#000", "#fff"],
 
     // Automatic Color Options
     sampleColorsFromImage:false,
@@ -52,14 +83,70 @@ const options = {
 
 }
 
-
-
-
-
-
-
-
 ```
+
+### `ditheringType` &lt;string&gt;
+
+- `errorDiffusion` (default)
+- `ordered`
+- `random`
+- `quantizationOnly` 
+
+### Error Diffusion Options
+
+These options only apply if `ditheringType` is set to `errorDiffusion`…
+
+#### `errorDiffusionMatrix` &lt;string&gt;
+
+Choose a preset error diffusion matrix or create your own (not yet implemented).
+
+- `floydSteinberg` (default)
+- `falseFloydSteinberg`
+- `jarvis`
+- `stucki`
+- `burkes`
+- `sierra3`
+- `sierra2`
+- `Sierra2-4A`
+
+#### `serpentine` &lt;boolean&gt; (not yet implemented)
+
+By default this is set to `false`, meaning the dithering algorithm iterates through each pixel, row by row, from left to right.
+
+If set to `true` the algorithm will go change direction on every other row.
+
+### Ordered Dithering Options
+
+These options only apply if `ditheringType` is set to `ordered`…
+
+#### `orderedType` &lt;string&gt; (default:'bayer')
+
+There is currently only one option for this: `bayer`. Others may be added in the future.
+
+#### `orderedMatrix` &lt[number, number]&gt; (default:[4,4])
+
+The number of columns and rows respectively of the bayer matrix.
+
+### `randomDitheringType` &lt;string&gt; (default:'blackAndWhite')
+
+Either `blackAndWhite` or `rgb`. Random dithering ignores any other color options.
+
+### palette &lt;string | string[]&gt; (default:["#000", "#FFF"])
+
+The color palette of the dithered image.
+
+Either a single string containing a keyword for a preset color palette, or an array of colors.
+
+The default is black and white e.g. `["#000", "#FFF"]`
+
+### `sampleColorsFromImage` &lt;boolean&gt; (default:false) 
+
+if `true` dither-me-this will select colors from the input image and use them as the color palette. (any color palette settings will be ignored)
+
+### `numberOfSampleColors` &lt;number&gt; (default:10) 
+
+The amount of colors to sample from the input image if `sampleColorsFromImage` is set to `true`
+
 
 
 ## What and Why?
@@ -76,7 +163,7 @@ You can also play with the client-side version: [Dither Me This](https://doodad.
 
 ## Project Scope
 
-Static Dither will be built to work with static site generators, such as [11ty](https://www.11ty.dev/).
+dither-me-this will be built to work with static site generators, such as [11ty](https://www.11ty.dev/).
 
 ### The main goal
 
@@ -97,10 +184,8 @@ To achieve the main goal other packages will (probably) need to be made for each
 - A wide range of dithering techniques, even ones that produce poor quality results.
 - Quantize (reduce colors) to an arbirary color palette
 - Sample colors from the target image to produce a color palette on the fly (this should produce the same color palette each time)
-- Output both `png` and `webp`
 - Output to the terminal the amount of data saved by dithering
 - Resizes images based on the options set
-
 
 ## Project Priorities
 

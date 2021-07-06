@@ -22,7 +22,6 @@ const defaultOptions = {
     randomDitheringType: "blackAndWhite",
 
     palette: 'default',
-    threshold: 50,
 
     sampleColorsFromImage: false,
     numberOfSampleColors: 10

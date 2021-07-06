@@ -5,6 +5,9 @@
   "main": "src/index.js",
   "author": "ShadowfaxRodeo",
   "license": "ISC",
+  "scripts": {
+    "examples/simple": "node examples/simple/index.js"
+  },
   "dependencies": {
     "canvas": "^2.8.0",
     "fs-extra": "^10.0.0"
