@@ -35,7 +35,7 @@ const dither = async (imageBuffer, opts) => {
     if (!imageBuffer) {
         return
     }
-    const imageDataIn = imageBuffer instanceof ImageData
+    const imageDataIn = imageBuffer.hasOwnProperty('data')
 
     const image = imageDataIn ? imageBuffer : await imageDataFromBuffer(imageBuffer)
 
