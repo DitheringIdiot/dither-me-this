@@ -1,5 +1,6 @@
 module.exports = {
     hexToRgb: (hex) => {
+        if (typeof hex !== 'string') return hex
 
         var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
         hex = hex.replace(shorthandRegex, (m, r, g, b) => {

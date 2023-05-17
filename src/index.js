@@ -36,7 +36,7 @@ const dither = async (imageBuffer, opts) => {
         return
     }
 
-    const image = await imageDataFromBuffer(imageBuffer)
+    const image = imageBuffer instanceof ImageData ? imageBuffer : await imageDataFromBuffer(imageBuffer)
 
     const options = { ...defaultOptions, ...opts }
 
