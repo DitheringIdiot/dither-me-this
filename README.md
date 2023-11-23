@@ -47,7 +47,7 @@ fs.readFile("input.jpg", async (err, data) => {
 
 dither-me-this is a single function that takes two arguments:
 
-1. The image you want to dither as a [`Buffer()`](https://nodejs.org/api/buffer.html#buffer_class_buffer)
+1. The image you want to dither as a [`Buffer()`](https://nodejs.org/api/buffer.html#buffer_class_buffer) or [`ImageData`](https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
 2. An [`Object`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#objects) containing dithering options
 
 
@@ -75,7 +75,8 @@ const options = {
     randomDitheringType: "blackAndWhite",
 
     // Color Options
-    palette: ["#000", "#fff"],
+    palette: ["#000", "#fff"], // array of hex values, array of rgb values, or keyword for preset palette
+    // preset palettes include: "default", "gameboy" and "sega master system"
 
     // Automatic Color Options
     sampleColorsFromImage:false,
@@ -131,11 +132,11 @@ The number of columns and rows respectively of the bayer matrix.
 
 Either `blackAndWhite` or `rgb`. Random dithering ignores any other color options.
 
-### palette &lt;string | string[]&gt; (default:["#000", "#FFF"])
+### palette &lt;string | string[] | number[3][]&gt; (default:["#000", "#FFF"])
 
 The color palette of the dithered image.
 
-Either a single string containing a keyword for a preset color palette, or an array of colors.
+Either a single string containing a keyword for a preset color palette, or an array of colors as hex or rgb values.
 
 The default is black and white e.g. `["#000", "#FFF"]`
 

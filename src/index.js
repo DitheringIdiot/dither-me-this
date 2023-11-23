@@ -35,8 +35,9 @@ const dither = async (imageBuffer, opts) => {
     if (!imageBuffer) {
         return
     }
+    const imageDataIn = imageBuffer.hasOwnProperty('data')
 
-    const image = await imageDataFromBuffer(imageBuffer)
+    const image = imageDataIn ? imageBuffer : await imageDataFromBuffer(imageBuffer)
 
     const options = { ...defaultOptions, ...opts }
 
@@ -53,7 +54,7 @@ const dither = async (imageBuffer, opts) => {
 
 
 
-    function setPixel (pixelIndex, pixel) {
+    function setPixel(pixelIndex, pixel) {
         image.data[pixelIndex] = pixel[0]
         image.data[pixelIndex + 1] = pixel[1]
         image.data[pixelIndex + 2] = pixel[2]
@@ -117,7 +118,7 @@ const dither = async (imageBuffer, opts) => {
 
 
 
-    return imageDataToBuffer(image)
+    return imageDataIn ? image : imageDataToBuffer(image)
 
 }
 
